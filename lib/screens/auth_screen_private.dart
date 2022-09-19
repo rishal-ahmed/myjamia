@@ -99,7 +99,7 @@ class _AuthScreenStatePrivate extends State<AuthScreenPrivate> {
 
       // ignore: use_build_context_synchronously
       Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
-      CommonFunctions.showSuccessToast('Login Successful');
+      CommonFunctions.showSuccessToast('Logged in successfully');
     } on HttpException {
       var errorMsg = 'Auth failed';
       CommonFunctions.showErrorDialog(errorMsg, context);
@@ -261,7 +261,7 @@ class _AuthScreenStatePrivate extends State<AuthScreenPrivate> {
                             child: Align(
                               alignment: Alignment.centerRight,
                               child: Text(
-                                'Forget Password?',
+                                'Forgot Password?',
                                 style: TextStyle(color: kSecondaryColor),
                               ),
                             ),

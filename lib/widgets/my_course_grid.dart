@@ -35,12 +35,16 @@ class _MyCourseGridState extends State<MyCourseGrid> {
     var url = '$BASE_URL/api/addon_status?unique_identifier=$identifier';
     final response = await http.get(Uri.parse(url));
     if (identifier == 'live-class') {
-      setState(() {
-        liveClassStatus = json.decode(response.body)['status'];
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          liveClassStatus = json.decode(response.body)['status'];
+        });
       });
     } else if (identifier == 'forum') {
-      setState(() {
-        courseForumStatus = json.decode(response.body)['status'];
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          courseForumStatus = json.decode(response.body)['status'];
+        });
       });
     }
   }
@@ -61,9 +65,10 @@ class _MyCourseGridState extends State<MyCourseGrid> {
         }
         Navigator.of(context).push(MaterialPageRoute(builder: (_) {
           return MyCourseDetailScreen(
-              courseId: widget.myCourse!.id!.toInt(),
-              len: tabLength,
-              enableDripContent: widget.myCourse!.enableDripContent.toString());
+            courseId: widget.myCourse!.id!.toInt(),
+            len: tabLength,
+            enableDripContent: widget.myCourse!.enableDripContent.toString(),
+          );
         }));
         // if (widget.myCourse!.enableDripContent == '0') {
         //   Navigator.of(context).push(MaterialPageRoute(builder: (_) {
@@ -111,8 +116,7 @@ class _MyCourseGridState extends State<MyCourseGrid> {
                 ],
               ),
               Padding(
-                padding:
-                    const EdgeInsets.only(bottom: 5, right: 8, left: 8, top: 5),
+                padding: const EdgeInsets.only(bottom: 5, right: 8, left: 8, top: 5),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,9 +124,7 @@ class _MyCourseGridState extends State<MyCourseGrid> {
                     SizedBox(
                       height: 42,
                       child: CustomText(
-                        text: widget.myCourse!.title!.length < 38
-                            ? widget.myCourse!.title
-                            : widget.myCourse!.title!.substring(0, 37),
+                        text: widget.myCourse!.title!.length < 38 ? widget.myCourse!.title : widget.myCourse!.title!.substring(0, 37),
                         fontSize: 14,
                         colors: kTextLightColor,
                         fontWeight: FontWeight.w400,
@@ -164,9 +166,7 @@ class _MyCourseGridState extends State<MyCourseGrid> {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     SizedBox(
                       width: double.infinity,
                       child: LinearPercentIndicator(
@@ -186,15 +186,13 @@ class _MyCourseGridState extends State<MyCourseGrid> {
                           Expanded(
                             flex: 1,
                             child: CustomText(
-                              text:
-                                  '${widget.myCourse!.courseCompletion}% Completed',
+                              text: '${widget.myCourse!.courseCompletion}% Completed',
                               fontSize: 12,
                               colors: Colors.black54,
                             ),
                           ),
                           CustomText(
-                            text:
-                                '${widget.myCourse!.totalNumberOfCompletedLessons}/${widget.myCourse!.totalNumberOfLessons}',
+                            text: '${widget.myCourse!.totalNumberOfCompletedLessons}/${widget.myCourse!.totalNumberOfLessons}',
                             fontSize: 12,
                             colors: Colors.black54,
                           ),

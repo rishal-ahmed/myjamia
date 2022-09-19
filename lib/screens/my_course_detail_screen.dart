@@ -4,36 +4,38 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
-import 'package:myjamia/models/common_functions.dart';
-import 'package:myjamia/models/course_db_model.dart';
-import 'package:myjamia/models/section_db_model.dart';
-import 'package:myjamia/models/video_db_model.dart';
-import 'package:myjamia/providers/database_helper.dart';
-import 'package:myjamia/screens/file_data_screen.dart';
-import 'package:myjamia/widgets/custom_text.dart';
-import 'package:myjamia/widgets/forum_tab_widget.dart';
-import 'package:myjamia/widgets/live_class_tab_widget.dart';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:http/http.dart' as http;
 import 'package:myjamia/constants.dart';
+import 'package:myjamia/models/common_functions.dart';
+import 'package:myjamia/models/course_db_model.dart';
 import 'package:myjamia/models/lesson.dart';
+import 'package:myjamia/models/section_db_model.dart';
+import 'package:myjamia/models/video_db_model.dart';
+import 'package:myjamia/providers/database_helper.dart';
 import 'package:myjamia/providers/my_courses.dart';
+import 'package:myjamia/screens/file_data_screen.dart';
 import 'package:myjamia/widgets/app_bar_two.dart';
-import 'package:flutter/material.dart';
+import 'package:myjamia/widgets/custom_text.dart';
+import 'package:myjamia/widgets/forum_tab_widget.dart';
+import 'package:myjamia/widgets/live_class_tab_widget.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../providers/shared_pref_helper.dart';
 import '../widgets/from_network.dart';
 import '../widgets/from_vimeo_id.dart';
 import '../widgets/from_youtube.dart';
 import 'course_detail_screen.dart';
 import 'webview_screen.dart';
 import 'webview_screen_iframe.dart';
-import '../providers/shared_pref_helper.dart';
 
 class MyCourseDetailScreen extends StatefulWidget {
   static const routeName = '/my-course-details';
@@ -186,7 +188,6 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen> with Single
   }
 
   void _initDownload(Lesson lesson, myCourseId, coTitle, coThumbnail, secTitle, secId) async {
-    // print(lesson.videoTypeWeb);
     if (lesson.videoTypeWeb == 'YouTube') {
       CommonFunctions.showSuccessToast('This video format is not supported for download.');
     } else if (lesson.videoTypeWeb == 'Vimeo') {
