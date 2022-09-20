@@ -1,22 +1,31 @@
 import 'dart:convert';
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
+import 'package:html_unescape/html_unescape.dart';
+import 'package:http/http.dart' as http;
 import 'package:myjamia/models/course.dart';
 import 'package:myjamia/models/course_detail.dart';
 import 'package:myjamia/models/lesson.dart';
 import 'package:myjamia/models/section.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
+
 import '../constants.dart';
 import 'shared_pref_helper.dart';
 
 class Courses with ChangeNotifier {
   List<Course> _items = [];
+  List<Course> _courses = [];
   List<Course> _topItems = [];
   List<CourseDetail> _courseDetailsitems = [];
 
-  Courses(this._items, this._topItems);
+  Courses(this._items, this._topItems, this._courses);
 
   List<Course> get items {
     return [..._items];
+  }
+
+  List<Course> get courses {
+    return [..._courses];
   }
 
   List<Course> get topItems {
@@ -24,6 +33,7 @@ class Courses with ChangeNotifier {
   }
 
   CourseDetail get getCourseDetail {
+    log('${_courseDetailsitems.length}', name: '_courseDetailsitems');
     return _courseDetailsitems.first;
   }
 
@@ -33,7 +43,8 @@ class Courses with ChangeNotifier {
 
   Course findById(int id) {
     // return _topItems.firstWhere((course) => course.id == id);
-    return _items.firstWhere((course) => course.id == id, orElse: () => _topItems.firstWhere((course) => course.id == id));
+
+    return _courses.firstWhere((course) => course.id == id, orElse: () => _topItems.firstWhere((course) => course.id == id));
   }
 
   Future<void> fetchTopCourses() async {
@@ -41,11 +52,12 @@ class Courses with ChangeNotifier {
     try {
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as List;
+
       // ignore: unnecessary_null_comparison
       if (extractedData == null) {
         return;
       }
-      // print(extractedData);
+
       _topItems = buildCourseList(extractedData);
       notifyListeners();
     } catch (error) {
@@ -104,7 +116,8 @@ class Courses with ChangeNotifier {
       }
       // print(extractedData);
 
-      _items = buildCourseList(extractedData);
+      _courses = buildCourseList(extractedData);
+      _items = _courses;
       notifyListeners();
     } catch (error) {
       rethrow;
@@ -132,23 +145,29 @@ class Courses with ChangeNotifier {
 
   List<Course> buildCourseList(List extractedData) {
     final List<Course> loadedCourses = [];
+    final HtmlUnescape htmlUnescape = HtmlUnescape();
     for (var courseData in extractedData) {
-      loadedCourses.add(Course(
-        id: int.parse(courseData['id']),
-        title: courseData['title'],
-        thumbnail: courseData['thumbnail'],
-        price: courseData['price'],
-        isFreeCourse: courseData['is_free_course'],
-        instructor: courseData['instructor_name'],
-        instructorImage: courseData['instructor_image'],
-        rating: courseData['rating'],
-        totalNumberRating: courseData['number_of_ratings'],
-        numberOfEnrollment: courseData['total_enrollment'],
-        shareableLink: courseData['shareable_link'],
-        courseOverviewProvider: courseData['course_overview_provider'],
-        courseOverviewUrl: courseData['video_url'],
-        vimeoVideoId: courseData['vimeo_video_id'],
-      ));
+      // log(htmlUnescape.convert(courseData['title']), name: 'Course Title');
+      // log(courseData['id'], name: 'Course id');
+
+      loadedCourses.add(
+        Course(
+          id: int.parse(courseData['id']),
+          title: htmlUnescape.convert(courseData['title']),
+          thumbnail: courseData['thumbnail'],
+          price: courseData['price'],
+          isFreeCourse: courseData['is_free_course'],
+          instructor: courseData['instructor_name'],
+          instructorImage: courseData['instructor_image'],
+          rating: courseData['rating'],
+          totalNumberRating: courseData['number_of_ratings'],
+          numberOfEnrollment: courseData['total_enrollment'],
+          shareableLink: courseData['shareable_link'],
+          courseOverviewProvider: courseData['course_overview_provider'],
+          courseOverviewUrl: courseData['video_url'],
+          vimeoVideoId: courseData['vimeo_video_id'],
+        ),
+      );
       // print(catData['name']);
     }
     return loadedCourses;
@@ -261,11 +280,11 @@ class Courses with ChangeNotifier {
 
   List<Lesson> buildCourseLessons(List extractedLessons) {
     final List<Lesson> loadedLessons = [];
-
+    final HtmlUnescape htmlUnescape = HtmlUnescape();
     for (var lessonData in extractedLessons) {
       loadedLessons.add(Lesson(
         id: int.parse(lessonData['id']),
-        title: lessonData['title'],
+        title: htmlUnescape.convert(lessonData['title']),
         duration: lessonData['duration'],
         lessonType: lessonData['lesson_type'],
         isFree: lessonData['is_free'],

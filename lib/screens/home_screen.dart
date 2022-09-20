@@ -86,6 +86,9 @@ class _HomeScreenState extends State<HomeScreen> {
           topCourses = Provider.of<Courses>(context, listen: false).topItems;
         });
       });
+
+      Provider.of<Courses>(context).filterCourses('all', 'all', 'all', 'all', 'all');
+
       // Provider.of<Bundles>(context).fetchBundle(true).then((_) {
       //   setState(() {
       //     bundles = Provider.of<Bundles>(context, listen: false).bundleItems;

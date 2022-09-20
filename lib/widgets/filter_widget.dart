@@ -1,20 +1,22 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-import 'package:myjamia/models/all_category.dart';
-import 'package:myjamia/models/category.dart';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:myjamia/models/all_category.dart';
+import 'package:myjamia/models/category.dart';
 import 'package:provider/provider.dart';
-import '../constants.dart';
-import '../providers/misc_provider.dart';
-import '../providers/courses.dart';
-import '../providers/categories.dart';
+
 import './custom_text.dart';
 import './star_display_widget.dart';
-import '../screens/courses_screen.dart';
+import '../constants.dart';
 import '../models/common_functions.dart';
+import '../providers/categories.dart';
+import '../providers/courses.dart';
+import '../providers/misc_provider.dart';
+import '../screens/courses_screen.dart';
 
 class FilterWidget extends StatefulWidget {
   const FilterWidget({Key? key}) : super(key: key);

@@ -1,7 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:myjamia/providers/courses.dart';
 import 'package:myjamia/widgets/app_bar_two.dart';
 import 'package:myjamia/widgets/course_list_item.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';

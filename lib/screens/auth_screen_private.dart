@@ -101,7 +101,7 @@ class _AuthScreenStatePrivate extends State<AuthScreenPrivate> {
       Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
       CommonFunctions.showSuccessToast('Logged in successfully');
     } on HttpException {
-      var errorMsg = 'Auth failed';
+      var errorMsg = 'Authentication failed';
       CommonFunctions.showErrorDialog(errorMsg, context);
     } catch (error) {
       // print(error);

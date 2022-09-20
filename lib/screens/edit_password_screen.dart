@@ -28,6 +28,8 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
     'newPassword': '',
   };
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  final _currentPassword = TextEditingController();
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
@@ -43,6 +45,9 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
           .updateUserPassword(_passwordData['oldPassword'].toString(), _passwordData['newPassword'].toString());
 
       CommonFunctions.showSuccessToast('Password updated Successfully');
+      _currentPassword.clear();
+      _passwordController.clear();
+      _confirmPasswordController.clear();
     } on HttpException {
       var errorMsg = 'Password Update failed';
       CommonFunctions.showErrorDialog(errorMsg, context);
@@ -133,10 +138,8 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
                           ),
                           TextFormField(
                             style: const TextStyle(fontSize: 16),
-                            decoration: getInputDecoration(
-                              'Current Password',
-                              Icons.vpn_key,
-                            ),
+                            decoration: getInputDecoration('Current Password', Icons.vpn_key),
+                            controller: _currentPassword,
                             obscureText: hidePassword,
                             // ignore: missing_return
                             validator: (value) {
@@ -167,10 +170,7 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
                           ),
                           TextFormField(
                             style: const TextStyle(fontSize: 16),
-                            decoration: getInputDecoration(
-                              'New Password',
-                              Icons.vpn_key,
-                            ),
+                            decoration: getInputDecoration('New Password', Icons.vpn_key),
                             obscureText: hidePassword,
                             controller: _passwordController,
                             // ignore: missing_return
@@ -201,6 +201,7 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
                             ),
                           ),
                           TextFormField(
+                            controller: _confirmPasswordController,
                             style: const TextStyle(fontSize: 16),
                             decoration: getInputDecoration(
                               'Confirm Password',

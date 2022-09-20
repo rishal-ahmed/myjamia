@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:html_unescape/html_unescape_small.dart';
 import 'package:http/http.dart';
 import 'package:myjamia/models/lesson.dart';
 import 'package:myjamia/models/my_course.dart';
@@ -52,10 +53,11 @@ class MyCourses with ChangeNotifier {
 
   List<MyCourse> buildMyCourseList(List extractedData) {
     final List<MyCourse> loadedCourses = [];
+    final HtmlUnescape htmlUnescape = HtmlUnescape();
     for (var courseData in extractedData) {
       loadedCourses.add(MyCourse(
         id: int.parse(courseData['id']),
-        title: courseData['title'],
+        title: htmlUnescape.convert(courseData['title']),
         thumbnail: courseData['thumbnail'],
         price: courseData['price'],
         instructor: courseData['instructor_name'],
@@ -107,12 +109,13 @@ class MyCourses with ChangeNotifier {
 
   List<Lesson> buildSectionLessons(List extractedLessons) {
     final List<Lesson> loadedLessons = [];
+    final HtmlUnescape htmlUnescape = HtmlUnescape();
 
     for (var lessonData in extractedLessons) {
       loadedLessons.add(
         Lesson(
           id: int.parse(lessonData['id']),
-          title: lessonData['title'],
+          title: htmlUnescape.convert(lessonData['title']),
           duration: lessonData['duration'],
           lessonType: lessonData['lesson_type'],
           isFree: lessonData['is_free'],

@@ -53,10 +53,11 @@ class MyApp extends StatelessWidget {
           create: (ctx) => Categories(),
         ),
         ChangeNotifierProxyProvider<Auth, Courses>(
-          create: (ctx) => Courses([], []),
+          create: (ctx) => Courses([], [], []),
           update: (ctx, auth, prevoiusCourses) => Courses(
             prevoiusCourses == null ? [] : prevoiusCourses.items,
             prevoiusCourses == null ? [] : prevoiusCourses.topItems,
+            prevoiusCourses == null ? [] : prevoiusCourses.courses,
           ),
         ),
         ChangeNotifierProxyProvider<Auth, MyCourses>(

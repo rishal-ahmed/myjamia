@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:flutter/material.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:myjamia/models/common_functions.dart';
 import 'package:myjamia/providers/shared_pref_helper.dart';
 import 'package:myjamia/widgets/custom_text.dart';
@@ -7,14 +9,13 @@ import 'package:myjamia/widgets/lesson_list_item.dart';
 import 'package:myjamia/widgets/star_display_widget.dart';
 import 'package:myjamia/widgets/tab_view_details.dart';
 import 'package:myjamia/widgets/util.dart';
-import 'package:html_unescape/html_unescape.dart';
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../constants.dart';
-import '../widgets/app_bar_two.dart';
 import '../providers/courses.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import '../widgets/app_bar_two.dart';
 import '../widgets/from_network.dart';
 import '../widgets/from_vimeo_id.dart';
 import '../widgets/from_youtube.dart';
@@ -33,7 +34,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> with SingleTick
 
   var _isInit = true;
   bool _isAuth = false;
-  var _isLoading = false;
+  var _isLoading = true;
   String? _authToken;
   dynamic loadedCourseDetail;
   dynamic courseId;
@@ -65,7 +66,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> with SingleTick
       courseId = ModalRoute.of(context)!.settings.arguments as int;
 
       // ignore: use_build_context_synchronously
-      Provider.of<Courses>(context, listen: false).fetchCourseDetailById(courseId).then((_) {
+      await Provider.of<Courses>(context, listen: false).fetchCourseDetailById(courseId).then((_) async {
         loadedCourseDetail = Provider.of<Courses>(context, listen: false).getCourseDetail;
         // ignore: unused_local_variable
         final activeCourse = Provider.of<Courses>(context, listen: false).findById(courseId);

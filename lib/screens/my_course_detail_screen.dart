@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:myjamia/constants.dart';
 import 'package:myjamia/models/common_functions.dart';
 import 'package:myjamia/models/course_db_model.dart';
@@ -28,7 +29,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../providers/shared_pref_helper.dart';
 import '../widgets/from_network.dart';
 import '../widgets/from_vimeo_id.dart';
@@ -231,8 +231,8 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen> with Single
   }
 
   Future<void> addonStatus(String identifier) async {
-    var url = '$BASE_URL/api/addon_status?unique_identifier=$identifier';
-    final response = await http.get(Uri.parse(url));
+    final String url = '$BASE_URL/api/addon_status?unique_identifier=$identifier';
+    final Response response = await http.get(Uri.parse(url));
     if (identifier == 'live-class') {
       setState(() {
         liveClassStatus = json.decode(response.body)['status'];
@@ -288,7 +288,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen> with Single
         // final _url = lesson.attachmentUrl;
         // Navigator.of(context)
         //     .pushNamed(MyCourseDownloadScreen.routeName, arguments: _url);
-        final url = '$BASE_URL/uploads/lesson_files/${lesson.attachment}';
+        final String url = '$BASE_URL/uploads/lesson_files/${lesson.attachment}';
         _launchURL(url);
       }
     }
